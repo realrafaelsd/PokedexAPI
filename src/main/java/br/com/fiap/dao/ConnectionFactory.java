@@ -1,3 +1,4 @@
+
 package br.com.fiap.dao;
 
 import java.sql.Connection;
@@ -5,33 +6,54 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConnectionFactory {
-    private static Connection connection;
 
-    public static void closeConnection() {
-        try {
-            if (!connection.isClosed()) {
-                connection.close();
-            }
-        } catch (Exception e) {
-            System.out.println("Erro: " + e.getMessage());
-        }
-    }
+    private static Connection connection;
 
     public static Connection getConnection() {
         try {
             if (connection != null && !connection.isClosed()) {
                 return connection;
             }
+
             Class.forName("oracle.jdbc.driver.OracleDriver");
+
             String url = "jdbc:oracle:thin:@oracle.fiap.com.br:1521:ORCL";
-            String user = System.getenv("DB_USER"); //usando variaveis de ambiente
-            String password = System.getenv("DB_PASSWORD"); //usando variaveis de ambiente
-            connection = DriverManager.getConnection(url, user, password);
-        } catch (SQLException e) {
-            System.out.println("Erro de SQL: " + e.getMessage());
+            String user = System.getenv("DB_USER");
+            String password = System.getenv("DB_PASSWORD");
+
+            if (user == null || password == null) {
+                throw new IllegalStateException(
+                        "Configure as variáveis de ambiente DB_USER e DB_PASSWORD."
+                );
+            }
+
+            connection = DriverManager.getConnection(
+                    url, user, password
+            );
+
+            return connection;
+
         } catch (ClassNotFoundException e) {
-            System.out.println("Erro nome da classe: " + e.getMessage());
+            throw new RuntimeException(
+                    "Driver JDBC do Oracle não encontrado.", e
+            );
+        } catch (SQLException e) {
+            throw new RuntimeException(
+                    "Erro ao conectar ao banco Oracle.", e
+            );
         }
-        return connection;
+    }
+
+    public static void closeConnection() {
+        try {
+            if (connection != null && !connection.isClosed()) {
+                connection.close();
+                connection = null;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(
+                    "Erro ao fechar a conexão com o banco.", e
+            );
+        }
     }
 }
