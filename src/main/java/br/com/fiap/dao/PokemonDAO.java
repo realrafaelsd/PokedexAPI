@@ -21,10 +21,12 @@ public class PokemonDAO {
                     PokemonTO pokemon = new PokemonTO();
                     pokemon.setCodigo(rs.getLong("codigo"));
                     pokemon.setNome(rs.getString("nome"));
-                    pokemon.setAltura(rs.getDouble("altura"));
-                    pokemon.setPeso(rs.getDouble("peso"));
                     pokemon.setCategoria(rs.getString("categoria"));
                     pokemon.setDataDeCaptura(rs.getDate("data_de_captura").toLocalDate());
+                    pokemon.setPeso(rs.getDouble("peso"));
+                    pokemon.setAltura(rs.getDouble("altura"));
+
+                    pokemons.add(pokemon);
                 }
 
             }else {
@@ -50,10 +52,10 @@ public class PokemonDAO {
             if (rs.next()) {
                 pokemon.setCodigo(rs.getLong("codigo"));
                 pokemon.setNome(rs.getString("nome"));
-                pokemon.setAltura(rs.getDouble("altura"));
-                pokemon.setPeso(rs.getDouble("peso"));
                 pokemon.setCategoria(rs.getString("categoria"));
                 pokemon.setDataDeCaptura(rs.getDate("data_de_captura").toLocalDate());
+                pokemon.setPeso(rs.getDouble("peso"));
+                pokemon.setAltura(rs.getDouble("altura"));
             } else {
                 return null;
             }
@@ -66,14 +68,14 @@ public class PokemonDAO {
     }
 
     public PokemonTO save(PokemonTO pokemon) {
-        String sql = "insert into ddd_pokemons (nome, altura, peso, categoria, data_de_captura) values(?, ?, ?, ?, ?)";
+        String sql = "insert into ddd_pokemons (nome, categoria, data_de_captura, peso, altura) values(?, ?, ?, ?, ?)";
         try(PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql))
         {
             ps.setString(1, pokemon.getNome());
-            ps.setDouble(2 ,pokemon.getAltura());
-            ps.setDouble(3 ,pokemon.getPeso());
-            ps.setString(4 ,pokemon.getCategoria());
-            ps.setDate(5 , Date.valueOf(pokemon.getDataDeCaptura()));
+            ps.setString(2 ,pokemon.getCategoria());
+            ps.setDate(3,  Date.valueOf(pokemon.getDataDeCaptura()));
+            ps.setDouble(4 ,pokemon.getPeso());
+            ps.setDouble(5 ,pokemon.getAltura());
             if (ps.executeUpdate() > 0) {
                 return pokemon;
             } else {
@@ -102,14 +104,14 @@ public class PokemonDAO {
         return false;
     }
     public PokemonTO update(PokemonTO pokemon) {
-        String sql = "update ddd_pokemons set nome = ?, altura = ?, peso = ?, categoria = ?, data_de_captura = ? where codigo = ?";
+        String sql = "update ddd_pokemons set nome = ?, categoria = ?, data_de_captura = ?,peso = ?, altura = ? where codigo = ?";
         try(PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql))
         {
             ps.setString(1, pokemon.getNome());
-            ps.setDouble(2 ,pokemon.getAltura());
-            ps.setDouble(3 ,pokemon.getPeso());
             ps.setString(4 ,pokemon.getCategoria());
             ps.setDate(5, Date.valueOf(pokemon.getDataDeCaptura()));
+            ps.setDouble(3 ,pokemon.getPeso());
+            ps.setDouble(2 ,pokemon.getAltura());
             if (ps.executeUpdate() > 0) {
                 return pokemon;
             } else {

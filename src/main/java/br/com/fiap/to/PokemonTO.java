@@ -1,11 +1,19 @@
 package br.com.fiap.to;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Positive;
+
 import java.time.LocalDate;
 
 public class PokemonTO {
     private Long codigo;
+    @NotBlank
     private String nome, categoria;
+    @Positive
     private Double altura, peso;
+    @PastOrPresent
     private LocalDate dataDeCaptura;
 
     public PokemonTO(){}
@@ -22,6 +30,7 @@ public class PokemonTO {
     public LocalDate getDataDeCaptura() {
         return dataDeCaptura;
     }
+
 
     public void setDataDeCaptura(LocalDate dataDeCaptura) {
         this.dataDeCaptura = dataDeCaptura;
