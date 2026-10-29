@@ -17,7 +17,7 @@ public class ConnectionFactory {
 
             Class.forName("oracle.jdbc.driver.OracleDriver");
 
-            String url = "jdbc:oracle:thin:@oracle.fiap.com.br:1521:ORCL";
+            String url = System.getenv("DB_URL");
             String user = System.getenv("DB_USER");
             String password = System.getenv("DB_PASSWORD");
 
