@@ -108,10 +108,10 @@ public class PokemonDAO {
         try(PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql))
         {
             ps.setString(1, pokemon.getNome());
-            ps.setString(4 ,pokemon.getCategoria());
-            ps.setDate(5, Date.valueOf(pokemon.getDataDeCaptura()));
-            ps.setDouble(3 ,pokemon.getPeso());
-            ps.setDouble(2 ,pokemon.getAltura());
+            ps.setString(2 ,pokemon.getCategoria());
+            ps.setDate(3, Date.valueOf(pokemon.getDataDeCaptura()));
+            ps.setDouble(4 ,pokemon.getPeso());
+            ps.setDouble(5 ,pokemon.getAltura());
             if (ps.executeUpdate() > 0) {
                 return pokemon;
             } else {
