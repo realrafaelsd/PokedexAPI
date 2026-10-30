@@ -112,6 +112,7 @@ public class PokemonDAO {
             ps.setDate(3, Date.valueOf(pokemon.getDataDeCaptura()));
             ps.setDouble(4 ,pokemon.getPeso());
             ps.setDouble(5 ,pokemon.getAltura());
+            ps.setLong(6, pokemon.getCodigo());
             if (ps.executeUpdate() > 0) {
                 return pokemon;
             } else {
